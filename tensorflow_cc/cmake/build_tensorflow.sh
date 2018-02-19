@@ -56,6 +56,10 @@ if [ -n "${CUDA_TOOLKIT_PATH}" ]; then
     export TF_CUDNN_VERSION="$(cat $CUDNN_INSTALL_PATH/include/cudnn.h | grep '#define CUDNN_MAJOR ' | awk '{print $3}')"
     # use gcc-6 for now, clang in the future
     export GCC_HOST_COMPILER_PATH=/usr/bin/gcc-6
+    if [ ! -e /usr/bin/gcc-6 ] && [ -e /usr/bin/gcc ] && [ "$(uname -s)" == 'Darwin' ]; then
+        # use /usr/bin/gcc (which usually just links to clang) on OSX
+        export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
+    fi
     export CLANG_CUDA_COMPILER_PATH=/usr/bin/clang
     export TF_CUDA_CLANG=0
 else
