@@ -56,16 +56,24 @@ if [ -n "${CUDA_TOOLKIT_PATH}" ]; then
     export TF_CUDNN_VERSION="$(cat $CUDNN_INSTALL_PATH/include/cudnn.h | grep '#define CUDNN_MAJOR ' | awk '{print $3}')"
     # use gcc-6 for now, clang in the future
     export GCC_HOST_COMPILER_PATH=/usr/bin/gcc-6
-    if [ ! -e /usr/bin/gcc-6 ] && [ -e /usr/bin/gcc ] && [ "$(uname -s)" == 'Darwin' ]; then
-        # use /usr/bin/gcc (which usually just links to clang) on OSX
-        export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
-    fi
     export CLANG_CUDA_COMPILER_PATH=/usr/bin/clang
     export TF_CUDA_CLANG=0
 else
     echo "CUDA support disabled"
     cuda_config_opts=""
     export TF_NEED_CUDA=0
+fi
+
+if [ "$(uname -s)" == 'Darwin' ]; then
+    if [ ! -e /usr/bin/gcc-6 ] && [ -e /usr/bin/gcc ]; then
+        # use /usr/bin/gcc (which usually just links to clang) on OSX
+        export GCC_HOST_COMPILER_PATH=/usr/bin/gcc
+    fi
+    # fixes required for compilation w/ CUDA 9+, XCode 8+
+    # @see https://github.com/tensorflow/tensorflow/issues/14174
+    for file in $(find . -name '*.cu.cc'); do
+        sed -i '' -e 's/__align__(sizeof(T))//' $file
+    done
 fi
 
 # configure and build
