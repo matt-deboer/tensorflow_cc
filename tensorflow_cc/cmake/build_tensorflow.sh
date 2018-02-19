@@ -74,7 +74,7 @@ if [ "$(uname -s)" == 'Darwin' ]; then
     for file in $(find . -name '*.cu.cc'); do
         sed -i '' -e 's/__align__(sizeof(T))//' $file
     done
-    sed -i '' -e 's/-lgomp//' ./third_party/gpus/cuda/BUILD.tpl
+    sed -i '' -e '/-lgomp/d' ./third_party/gpus/cuda/BUILD.tpl
 fi
 
 # configure and build
