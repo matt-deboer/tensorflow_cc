@@ -10,7 +10,7 @@ project(
 option(TENSORFLOW_SHARED "Build shared library (required for GPU support)." OFF)
 option(TENSORFLOW_STATIC "Build static library." ON)
 option(SYSTEM_PROTOBUF "Use system protobuf instead of static protobuf from contrib/makefile." OFF)
-
+set(TENSORFLOW_VERSION v1.5.0 CACHE STRING "Tensorflow (tag) version to use, default: 'v1.5.0'")
 # -------------
 # CMake Options
 # -------------
