@@ -22,6 +22,7 @@ export TF_NEED_KAFKA=0
 export PYTHON_BIN_PATH="$(which python3)"
 export PYTHON_LIB_PATH="$($PYTHON_BIN_PATH -c 'import site; print(site.getsitepackages()[0])')"
 
+export extra_bazel_config=""
 # configure cuda environmental variables
 
 if [ -e /opt/cuda ]; then
@@ -95,7 +96,8 @@ if [ "$(uname -s)" == 'Darwin' ]; then
 		EOF
 		tail -n +$target_line "${xla_orc_jit}.original"; 
 	} > $xla_orc_jit
-
+	# make bazel respect additional library paths
+	extra_bazel_config="--action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH"
 fi
 
 # configure and build
@@ -103,5 +105,6 @@ fi
 bazel build -c opt \
 			$cuda_config_opts \
 			--incompatible_load_argument_is_label=false \
+			$extra_bazel_config \
 			--copt=${CC_OPT_FLAGS} tensorflow:libtensorflow_cc.so
 bazel shutdown
