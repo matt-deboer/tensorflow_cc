@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(
   "tensorflow_cc"
-  VERSION 0.2
+  VERSION 1.7.0
 )
 
 # Static library with no GPU support is built by default.
@@ -9,6 +9,7 @@ project(
 # If enabled, bazel has to be installed.
 option(TENSORFLOW_SHARED "Build shared library (required for GPU support)." OFF)
 option(TENSORFLOW_STATIC "Build static library." ON)
+set(TENSORFLOW_TAG "v1.7.0" CACHE STRING "The tensorflow release tag to be checked out (default v1.7.0).")
 option(SYSTEM_PROTOBUF "Use system protobuf instead of static protobuf from contrib/makefile." OFF)
 set(TENSORFLOW_VERSION v1.5.0 CACHE STRING "Tensorflow (tag) version to use, default: 'v1.5.0'")
 # -------------
@@ -44,9 +45,6 @@ endif()
 # Define Shared Tensorflow Interface
 # ----------------------------------
 if(SYSTEM_PROTOBUF)
-  if(NOT TENSORFLOW_STATIC)
-    message(FATAL_ERROR "SYSTEM_PROTOBUF is only supported with TENSORFLOW_STATIC.")
-  endif()
   find_package(Protobuf REQUIRED)
 endif()
 
@@ -76,7 +74,6 @@ if(TENSORFLOW_SHARED)
   target_link_libraries(
     tensorflow_cc_shared INTERFACE
     "${CMAKE_INSTALL_PREFIX}/lib/tensorflow_cc/libtensorflow_cc.so"
-    "${CMAKE_INSTALL_PREFIX}/lib/tensorflow_cc/libtensorflow_framework.so"
     dl pthread
   )
   if(SYSTEM_PROTOBUF)
@@ -181,10 +178,24 @@ install(
   DESTINATION include/tensorflow
   FILES_MATCHING PATTERN "*.h"
 )
-# install all files downloaded by contrib/makefile as dependencies
+# install all header files downloaded by contrib/makefile
+# (Note that we cannot simply include all *.h or *.hpp files, since e.g., eigen
+# does not use file extensions for header files.)
 install(
   DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tensorflow/tensorflow/contrib/makefile/downloads/"
   DESTINATION include/tensorflow/tensorflow/contrib/makefile/downloads
+  FILES_MATCHING PATTERN "*"
+                 PATTERN "Makefile*"  EXCLUDE
+                 PATTERN "*unittest*" EXCLUDE
+                 PATTERN "*.o"        EXCLUDE
+                 PATTERN "*.so"       EXCLUDE
+                 PATTERN "*.so.*"     EXCLUDE
+                 PATTERN "*.a"        EXCLUDE
+                 PATTERN "*.tbz"      EXCLUDE
+                 PATTERN "*.tgz"      EXCLUDE
+                 PATTERN "*.tar"      EXCLUDE
+                 PATTERN "*.tar.*"    EXCLUDE
+                 PATTERN "*.zip"      EXCLUDE
 )
 # install all files from third_party folder (e.g., Eigen/Tensor)
 install(
@@ -202,7 +213,6 @@ endif()
 if(TENSORFLOW_SHARED)
   install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/tensorflow/bazel-bin/tensorflow/libtensorflow_cc.so"
-          "${CMAKE_CURRENT_BINARY_DIR}/tensorflow/bazel-bin/tensorflow/libtensorflow_framework.so"
     DESTINATION lib/tensorflow_cc
   )
 endif()
