@@ -54,7 +54,7 @@ if [ -n "${CUDA_TOOLKIT_PATH}" ]; then
     export TF_NEED_CUDA=1
     export TF_CUDA_COMPUTE_CAPABILITIES=${TF_CUDA_COMPUTE_CAPABILITIES:-"3.5,5.2,6.1,6.2"}
     export TF_CUDA_VERSION="$($CUDA_TOOLKIT_PATH/bin/nvcc --version | sed -n 's/^.*release \(.*\),.*/\1/p')"
-    export TF_CUDNN_VERSION="$(sed -n 's/^#define CUDNN_MAJOR\s*\(.*\).*/\1/p' $CUDNN_INSTALL_PATH/include/cudnn.h)"
+    export TF_CUDNN_VERSION="$(cat $CUDNN_INSTALL_PATH/include/cudnn.h | grep '#define CUDNN_MAJOR ' | awk '{print $3}')"
     # use gcc-6 for now, clang in the future
 	if [ ! -e /usr/bin/gcc-6 ] && [ -e /usr/bin/gcc ] && [ "$(uname -s)" == 'Darwin' ]; then
 		# use /usr/bin/gcc (which usually just links to clang) on OSX
