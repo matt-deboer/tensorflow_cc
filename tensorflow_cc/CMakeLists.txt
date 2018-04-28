@@ -203,9 +203,15 @@ install(
   DESTINATION include/tensorflow/third_party
 )
 # install static libprotobuf from contrib/makefile
+# if (NOT SYSTEM_PROTOBUF)
+#   install(
+#     FILES "${CMAKE_CURRENT_BINARY_DIR}/tensorflow/tensorflow/contrib/makefile/gen/protobuf-host/lib/libprotobuf.a"
+#     DESTINATION lib/tensorflow_cc
+#   )
+# endif()
 if (NOT SYSTEM_PROTOBUF)
   install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/tensorflow/tensorflow/contrib/makefile/gen/protobuf-host/lib/libprotobuf.a"
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/external/org_tensorflow/tensorflow/contrib/makefile/gen/protobuf-host/lib/libprotobuf.a"
     DESTINATION lib/tensorflow_cc
   )
 endif()
