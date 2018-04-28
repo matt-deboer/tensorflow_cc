@@ -83,19 +83,19 @@ if [ "$(uname -s)" == 'Darwin' ]; then
 	sed -i '' -e '/-lgomp/d' ./third_party/gpus/cuda/BUILD.tpl
 
 	# @see https://github.com/tensorflow/tensorflow/issues/14127
-	xla_orc_jit="./tensorflow/compiler/xla/service/cpu/simple_orc_jit.cc"
-	mv $xla_orc_jit "${xla_orc_jit}.original"
-	target_line=$(grep -n 'namespace xla {' "${xla_orc_jit}.original" | cut -d ":" -f 1)
-	{ 
-		head -n $(($target_line-1)) "${xla_orc_jit}.original"; 
-		cat <<-EOF
-		#if defined(__APPLE__)
-		static void sincos(double, double*, double*)  __attribute__((weakref ("__sincos")));
-		static void sincosf(float, float*, float*) __attribute__((weakref ("__sincosf")));
-		#endif
-		EOF
-		tail -n +$target_line "${xla_orc_jit}.original"; 
-	} > $xla_orc_jit
+	# xla_orc_jit="./tensorflow/compiler/xla/service/cpu/simple_orc_jit.cc"
+	# mv $xla_orc_jit "${xla_orc_jit}.original"
+	# target_line=$(grep -n 'namespace xla {' "${xla_orc_jit}.original" | cut -d ":" -f 1)
+	# { 
+	# 	head -n $(($target_line-1)) "${xla_orc_jit}.original"; 
+	# 	cat <<-EOF
+	# 	#if defined(__APPLE__)
+	# 	static void sincos(double, double*, double*)  __attribute__((weakref ("__sincos")));
+	# 	static void sincosf(float, float*, float*) __attribute__((weakref ("__sincosf")));
+	# 	#endif
+	# 	EOF
+	# 	tail -n +$target_line "${xla_orc_jit}.original"; 
+	# } > $xla_orc_jit
 	# make bazel respect additional library paths
 	extra_bazel_config="--action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH"
 fi
