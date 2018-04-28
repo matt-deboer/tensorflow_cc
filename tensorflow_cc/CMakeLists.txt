@@ -209,12 +209,6 @@ if (NOT SYSTEM_PROTOBUF)
     DESTINATION lib/tensorflow_cc
   )
 endif()
-# if (NOT SYSTEM_PROTOBUF)
-#   install(
-#     FILES "${CMAKE_CURRENT_BINARY_DIR}/external/org_tensorflow/tensorflow/contrib/makefile/gen/protobuf-host/lib/libprotobuf.a"
-#     DESTINATION lib/tensorflow_cc
-#   )
-# endif()
 # shared library specific
 if(TENSORFLOW_SHARED)
   install(
