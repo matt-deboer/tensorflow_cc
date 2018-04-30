@@ -69,6 +69,8 @@ else
 	export TF_NEED_CUDA=0
 fi
 
+echo "PWD: $(pwd)"
+
 if [ "$(uname -s)" == 'Darwin' ]; then
 	if [ ! -e /usr/bin/gcc-6 ] && [ -e /usr/bin/gcc ]; then
 		# use /usr/bin/gcc (which usually just links to clang) on OSX
@@ -79,7 +81,6 @@ if [ "$(uname -s)" == 'Darwin' ]; then
 	for file in $(find . -name '*.cu.cc'); do
 		sed -i '' -e 's/__align__(sizeof(T))//' $file
 	done
-	echo "PWD: $(pwd)"
 	sed -i '' -e '/-lgomp/d' ./third_party/gpus/cuda/BUILD.tpl
 
 	# @see https://github.com/tensorflow/tensorflow/issues/14127
