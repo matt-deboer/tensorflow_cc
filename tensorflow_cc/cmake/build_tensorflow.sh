@@ -79,9 +79,9 @@ if [ "$(uname -s)" == 'Darwin' ]; then
 	# fixes required for compilation w/ CUDA 9+, XCode 8+
 	# @see https://github.com/tensorflow/tensorflow/issues/14174
 	for file in $(find . -name '*.cu.cc'); do
-		sed -i '' -e 's/__align__(sizeof(T))//' $file
+		sed -i'' -e 's/__align__(sizeof(T))//' $file
 	done
-	sed -i '' -e '/-lgomp/d' ./third_party/gpus/cuda/BUILD.tpl
+	sed -i'' -e '/-lgomp/d' ./third_party/gpus/cuda/BUILD.tpl
 
 	# @see https://github.com/tensorflow/tensorflow/issues/14127
 	# xla_orc_jit="./tensorflow/compiler/xla/service/cpu/simple_orc_jit.cc"
@@ -103,15 +103,15 @@ fi
 
 # fix broken protobuf/eigen includes
 # @see https://github.com/tensorflow/tensorflow/issues/17067#issuecomment-366544970
-sed -i '' -e 's|"https://mirror.bazel.build/github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz"|"https://mirror.bazel.build/github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|"https://github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz"|"https://github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|sha256 = "846d907acf472ae233ec0882ef3a2d24edbbe834b80c305e867ac65a1f2c59e3"|sha256 = "eb16b33431b91fe8cee479575cee8de202f3626aaf00d9bf1783c6e62b4ffbc7"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|strip_prefix = "protobuf-396336eb961b75f03b25824fe86cf6490fb75e3a"|strip_prefix = "protobuf-50f552646ba1de79e07562b41f3999fe036b4fd0"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|"https://mirror.bazel.build/github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz"|"https://mirror.bazel.build/github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|"https://github.com/google/protobuf/archive/396336eb961b75f03b25824fe86cf6490fb75e3a.tar.gz"|"https://github.com/dtrebbien/protobuf/archive/50f552646ba1de79e07562b41f3999fe036b4fd0.tar.gz"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|sha256 = "846d907acf472ae233ec0882ef3a2d24edbbe834b80c305e867ac65a1f2c59e3"|sha256 = "eb16b33431b91fe8cee479575cee8de202f3626aaf00d9bf1783c6e62b4ffbc7"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|strip_prefix = "protobuf-396336eb961b75f03b25824fe86cf6490fb75e3a"|strip_prefix = "protobuf-50f552646ba1de79e07562b41f3999fe036b4fd0"|g' ./tensorflow/workspace.bzl
 
-sed -i '' -e 's|"https://mirror.bazel.build/bitbucket.org/eigen/eigen/get/2355b229ea4c.tar.gz"|"https://mirror.bazel.build/bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|"https://bitbucket.org/eigen/eigen/get/2355b229ea4c.tar.gz"|"https://bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|sha256 = "0cadb31a35b514bf2dfd6b5d38205da94ef326ec6908fc3fd7c269948467214f"|sha256 = "fa26e9b9ff3a2692b092d154685ec88d6cb84d4e1e895006541aff8603f15c16"|g' ./tensorflow/workspace.bzl
-sed -i '' -e 's|strip_prefix = "eigen-eigen-2355b229ea4c"|strip_prefix = "dtrebbien-eigen-374842a18727"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|"https://mirror.bazel.build/bitbucket.org/eigen/eigen/get/2355b229ea4c.tar.gz"|"https://mirror.bazel.build/bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|"https://bitbucket.org/eigen/eigen/get/2355b229ea4c.tar.gz"|"https://bitbucket.org/dtrebbien/eigen/get/374842a18727.tar.gz"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|sha256 = "0cadb31a35b514bf2dfd6b5d38205da94ef326ec6908fc3fd7c269948467214f"|sha256 = "fa26e9b9ff3a2692b092d154685ec88d6cb84d4e1e895006541aff8603f15c16"|g' ./tensorflow/workspace.bzl
+sed -i'' -e 's|strip_prefix = "eigen-eigen-2355b229ea4c"|strip_prefix = "dtrebbien-eigen-374842a18727"|g' ./tensorflow/workspace.bzl
 
 
 # configure and build
